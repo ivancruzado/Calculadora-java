@@ -15,6 +15,7 @@ public class VCalculadora extends JFrame {
     String num2;
     String simbolo;
     Float resultado;
+    boolean existeComa;
     public ControllerOperaciones controller;
     public VCalculadora() {
         setSize(350,500);
@@ -44,8 +45,8 @@ public class VCalculadora extends JFrame {
         pantalla.setBounds(20, 15, 300, 40);
         Font fuente = new Font("Serif", Font.BOLD,25);
         pantalla.setFont(fuente);
-
         pantalla.setEditable(false);
+        pantalla.setText("0");
         panel1.add(pantalla);
 
 
@@ -94,6 +95,15 @@ public class VCalculadora extends JFrame {
         JButton igual = new JButton("=");
         panel1.add(igual);
         igual.setBounds(250, 250, 75, 30);
+        JButton coma = new JButton(".");
+        panel1.add(coma);
+        coma.setBounds(180, 250, 75, 30);
+        JButton borrarTodo = new JButton("C");
+        panel1.add(borrarTodo);
+        borrarTodo.setBounds(180, 62, 75, 30);
+
+        existeComa = false;
+
 
 
         suma.addActionListener(new ActionListener() {
@@ -132,6 +142,25 @@ public class VCalculadora extends JFrame {
                 resultado = null;
             }
         });
+        coma.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                if (!existeComa){
+                    num1 = num1 + ".";
+                    pantalla.setText(pantalla.getText()+".");
+                    existeComa= true;
+                }
+            }
+        });
+        borrarTodo.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                num1 = null;
+                num2 = null;
+                pantalla.setText("");
+            }
+        });
+
         igual.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -151,11 +180,12 @@ public class VCalculadora extends JFrame {
                     num1 = String.valueOf(resultado);
 
                 } else if (simbolo.equalsIgnoreCase("÷")) {
-                    Float division = controller.dividir(Float.parseFloat(num2),Float.parseFloat(num1));
-                    pantalla.setText(String.valueOf(division));
+                    resultado = controller.dividir(Float.parseFloat(num2),Float.parseFloat(num1));
+                    pantalla.setText(String.valueOf(resultado));
                     num1 = String.valueOf(resultado);
 
                 }
+                existeComa= false;
 
 
             }
